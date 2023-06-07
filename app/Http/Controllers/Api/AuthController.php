@@ -178,7 +178,6 @@ class AuthController extends BaseController
             $data = [
                 'access_token' => $token,
                 'token_type' => 'bearer',
-                // 'expires_in' => auth('api')->factory()->getTTL() * 60,
             ];
             $data = array_merge(
                 $data,

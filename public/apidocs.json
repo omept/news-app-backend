@@ -1,0 +1,141 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "News App  API",
+        "description": "This is the API service for the app",
+        "contact": {
+            "url": "#"
+        },
+        "version": "1.0"
+    },
+    "paths": {
+        "/api/auth/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Logs the user in and sends JWT token to be sent with every request with the user's detail",
+                "operationId": "dd51a484b7fa0f97c7680fdbde14cf5f",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "User's email",
+                        "required": true
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "description": "User's password",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/auth/sign-up": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Register the user and sends JWT token to be sent with every request with the user's detail",
+                "operationId": "03670c7d2a35091b7ba4087aa7be3814",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "User's email  ",
+                        "required": true
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "User's name",
+                        "required": true
+                    },
+                    {
+                        "name": "paytag",
+                        "in": "query",
+                        "description": "User's unique paytag.",
+                        "required": true
+                    },
+                    {
+                        "name": "country_id",
+                        "in": "query",
+                        "description": "User's country Id. This is used in setting the payment provider to attach to the user.",
+                        "required": true
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "description": "User's password",
+                        "required": true
+                    },
+                    {
+                        "name": "transfer_pin",
+                        "in": "query",
+                        "description": "User's transfer_pin",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "authorization token with user's data"
+                    }
+                }
+            }
+        },
+        "/api/auth/invalidate": {
+            "delete": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Invalidate/Delete user authorization token using previous token",
+                "operationId": "df08f4fab11bf02c01d109d225efdaef",
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "query",
+                        "description": "authorization token",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success message"
+                    }
+                }
+            }
+        },
+        "/api/auth/refresh": {
+            "patch": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Refresh user authorization token details using previous token",
+                "operationId": "6227719d94297c4ae6bee95c868c4890",
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "query",
+                        "description": "authorization token",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "new authorization token"
+                    }
+                }
+            }
+        }
+    },
+    "externalDocs": {
+        "description": "Find out more about the app",
+        "url": "#"
+    }
+}

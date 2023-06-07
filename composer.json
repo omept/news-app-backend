@@ -20,7 +20,8 @@
         "laravel/sail": "^1.0.1",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^5.10",
-        "phpunit/phpunit": "^9.5.10"
+        "phpunit/phpunit": "^9.5.10",
+        "zircote/swagger-php": "^3.2"
     },
     "autoload": {
         "psr-4": {
@@ -47,6 +48,9 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
+        ],
+        "swagger-generate": [
+            "./vendor/bin/openapi app/Http/Controllers -o public/apidocs.json"
         ]
     },
     "extra": {
