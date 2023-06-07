@@ -23,7 +23,7 @@ $api->version('v1', function ($api) {
 
     $api->group(
         [
-            'namespace' => 'App\Http\Controllers',
+            'namespace' => 'App\Http\Controllers\Api',
         ],
         function ($api) {
 
@@ -33,8 +33,8 @@ $api->version('v1', function ($api) {
                 ]);
             });
 
-            $api->post('/auth/login', 'APIAuthController@login')->middleware('throttle:3,1');
-            $api->post('/auth/sign-up', 'APIAuthController@sign_up')->middleware('throttle:5,1');
+            $api->post('/auth/login', 'AuthController@login')->middleware('throttle:3,1');
+            $api->post('/auth/sign-up', 'AuthController@sign_up')->middleware('throttle:5,1');
             $api->group(
                 [
                     'middleware' => 'jwt.auth'
@@ -42,11 +42,11 @@ $api->version('v1', function ($api) {
                 function ($api) {
 
                     $api->patch('/auth/refresh', [
-                        'uses' => 'APIAuthController@patchRefresh',
+                        'uses' => 'AuthController@patchRefresh',
                         'as' => 'api.auth.refresh'
                     ]);
                     $api->delete('/auth/invalidate', [
-                        'uses' => 'APIAuthController@deleteInvalidate',
+                        'uses' => 'AuthController@deleteInvalidate',
                         'as' => 'api.auth.invalidate'
                     ]);
                 }

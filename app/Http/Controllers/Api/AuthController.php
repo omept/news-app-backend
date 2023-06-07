@@ -158,7 +158,6 @@ class AuthController extends BaseController
             if ($validator->fails()) {
                 throw new ValidationException($validator);
             }
-            $payment_provider = User::evalPaymentProvider((int)$request->country_id);
             $user = User::create([
                 'email' => $request->email,
                 'password' => Hash::make($request->password),

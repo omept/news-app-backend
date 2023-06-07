@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Log;
 
 class Response
 {
-    
+
     const UnAuthorisedResponseCode = 401;
     const ProblemResponseCode = 400;
     const ServerErrorResponseCode = 500;
@@ -39,11 +39,8 @@ class Response
         ];
 
 
-        if (!is_null($trace) && is_array($trace)) {
-            try {
-                Log::info(print_r($trace, true));
-            } catch (\Exception $e) {
-            }
+        if (!is_null($trace)) {
+            Log::info($trace);
         }
 
 
@@ -51,7 +48,7 @@ class Response
     }
 
 
-    Static function Ok($message = null, $data = [])
+    static function Ok($message = null, $data = [])
     {
         $body = [
             'message' => $message ?? "",

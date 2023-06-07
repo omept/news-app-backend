@@ -1,15 +1,10 @@
 <?php
 
-/**
- * Created by PhpStorm.
- * User: gem
- */
-
 namespace App\Transformers;
 
 
 use App\Models\User;
-use App\Services\Utils\Date;
+use App\Utils\Date;
 use Carbon\Carbon;
 use  \League\Fractal\TransformerAbstract;
 
