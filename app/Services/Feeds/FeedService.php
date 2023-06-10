@@ -21,8 +21,9 @@ class FeedService
     ];
     private ?User $user = null;
     private ?Adapter $adapter = null;
+    private $config = [];
 
-    function __construct(User $user = null)
+    function __construct(User $user = null, array $config = [])
     {
         if ($user) {
             $this->user = $user;
@@ -55,11 +56,12 @@ class FeedService
     }
 
 
-    function feeds(string $search = ''): array
+    function feeds(array $config = []): array
     {
         $settings = $this->settings();
-        $country = $settings['country'];
-        $category = $settings['category'];
+        $search = $confiq['search'] ?? '';
+        $country = $confiq['country'] ?? $settings['country'];
+        $category = $config['category'] ?? $settings['category'];
         $body = $this->adapter->query($country,  $category,  $search);
         return json_decode($body, true);
     }

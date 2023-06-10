@@ -62,7 +62,13 @@ class FeedController extends BaseController
             $feedService = new FeedService($user);
 
             $data = [
-                'feeds' => $feedService->feeds(),
+                'feeds' => $feedService->feeds(
+                    [
+                        'search' => $request->search ?? '',
+                        'category' => $request->category,
+                        'country'  => $request->country
+                    ]
+                ),
             ];
 
             return Response::Ok("Feeds", $data, $request);

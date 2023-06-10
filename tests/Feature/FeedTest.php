@@ -53,6 +53,46 @@ class FeedTest extends TestCase
     }
 
     /**
+     * Test that feeds api returns feeds with passed category
+     *
+     * @return void
+     */
+    public function testFeedCategoryChange()
+    {
+        //seed default category
+        Category::factory()->create();
+        // seed sports category
+        $category = 'sports';
+        Category::factory()->create(['name' => $category]);
+
+
+        $uri = 'api/feeds?category=' . $category;
+        $response = $this->call(
+            'GET',
+            $uri,
+            [], //params
+            [], //cookies
+            [], // files
+            $this->headers(), // server
+            []
+        );
+
+        $response->assertOk();
+
+        $response->assertJsonStructure([
+            "data" => [
+                "feeds" => [
+                    "category",
+                    "items",
+                    "country"
+                ]
+            ]
+        ]);
+        $resArr = json_decode($response->getContent(), true);
+        $this->assertTrue($resArr['data']['feeds']['category']['name'] == ucwords($category));
+    }
+
+    /**
      * Test that feeds api returns feeds with default country when to country is passed
      *
      * @return void
