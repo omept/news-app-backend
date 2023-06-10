@@ -59,8 +59,8 @@ class FeedService
     function feeds(array $config = []): array
     {
         $settings = $this->settings();
-        $search = $confiq['search'] ?? '';
-        $country = $confiq['country'] ?? $settings['country'];
+        $search = $config['search'] ?? '';
+        $country = $config['country'] ?? $settings['country'];
         $category = $config['category'] ?? $settings['category'];
         $body = $this->adapter->query($country,  $category,  $search);
         return json_decode($body, true);

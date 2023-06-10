@@ -44,7 +44,8 @@ class FeedTest extends TestCase
                 "feeds" => [
                     "category",
                     "items",
-                    "country"
+                    "country",
+                    "search"
                 ]
             ]
         ]);
@@ -84,7 +85,8 @@ class FeedTest extends TestCase
                 "feeds" => [
                     "category",
                     "items",
-                    "country"
+                    "country",
+                    "search"
                 ]
             ]
         ]);
@@ -122,10 +124,87 @@ class FeedTest extends TestCase
                     "category",
                     "items",
                     "country",
+                    "search",
                 ]
             ]
         ]);
         $resArr = json_decode($response->getContent(), true);
         $this->assertTrue($resArr['data']['feeds']['country']['name'] == ucwords($defaultCountry));
+    }
+
+    
+    /**
+     * Test that feeds api returns feeds with passed country
+     *
+     * @return void
+     */
+    public function testFeedCountryChange()
+    {
+        //seed default category
+        Category::factory()->create();
+        $country = 'nigeria';
+
+
+        $uri = 'api/feeds?country=' . $country;
+        $response = $this->call(
+            'GET',
+            $uri,
+            [], //params
+            [], //cookies
+            [], // files
+            $this->headers(), // server
+            []
+        );
+
+        $response->assertOk();
+
+        $response->assertJsonStructure([
+            "data" => [
+                "feeds" => [
+                    "category",
+                    "items",
+                    "country",
+                    "search",
+                ]
+            ]
+        ]);
+        $resArr = json_decode($response->getContent(), true);
+        $this->assertTrue($resArr['data']['feeds']['country']['name'] == ucwords($country));
+    }
+    
+    
+    /**
+     * Test that feeds api returns feeds with passed search filter
+     *
+     * @return void
+     */
+    public function testFeedSearch()
+    {
+        $search = 'global warming';
+        $uri = 'api/feeds?search='.$search ;
+        $response = $this->call(
+            'GET',
+            $uri,
+            [], //params
+            [], //cookies
+            [], // files
+            $this->headers(), // server
+            []
+        );
+
+        $response->assertOk();
+
+        $response->assertJsonStructure([
+            "data" => [
+                "feeds" => [
+                    "category",
+                    "items",
+                    "country",
+                    "search"
+                ]
+            ]
+        ]);
+        $resArr = json_decode($response->getContent(), true);
+        $this->assertTrue($resArr['data']['feeds']['search'] == $search);
     }
 }

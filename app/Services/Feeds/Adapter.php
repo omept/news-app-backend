@@ -53,6 +53,7 @@ class Adapter
             'country' => [
                 'name' => ucwords($country),
             ],
+            'search' => $search,
             'items' => $this->adapter->query($country,  $category,  $search)
         ]);
     }
