@@ -4,13 +4,12 @@ namespace App\Services\Feeds;
 
 use App\Models\Category;
 use App\Models\User;
-use App\Services\Feeds\Providers\Provider;
 
 class FeedService
 {
 
     static $defaultCategoryName = 'business';
-    static $defaultCountry = 'germany';
+    static $supportedCountries = ['germany', 'usa', 'china', 'nigeria'];
     const NewscatcherApi = 'NewscatcherApi'; # default
     const NewsData = 'NewsData';
     const NewsApi = 'NewsApi';
@@ -21,7 +20,6 @@ class FeedService
     ];
     private ?User $user = null;
     private ?Adapter $adapter = null;
-    private $config = [];
 
     function __construct(User $user = null, array $config = [])
     {
@@ -37,6 +35,11 @@ class FeedService
         return Category::where('name', self::$defaultCategoryName)->first();
     }
 
+    function defaultCountry(): string
+    {
+        return self::$supportedCountries[0];
+    }
+
     function defaultNewsProvider(): array
     {
         return self::$feedProviders[0];
@@ -50,7 +53,7 @@ class FeedService
         }
 
         return [
-            'country' => $userSettings['country'] ?? self::$defaultCountry,
+            'country' => $userSettings['country'] ?? self::defaultCountry(),
             'category' => $userSettings['category'] ?? self::$defaultCategoryName,
         ];
     }
@@ -64,5 +67,14 @@ class FeedService
         $category = $config['category'] ?? $settings['category'];
         $body = $this->adapter->query($country,  $category,  $search);
         return json_decode($body, true);
+    }
+
+    function meta(): array
+    {
+        return [
+            'countries' => self::$supportedCountries,
+            'providers' => self::$feedProviders,
+            'categories' => Category::select('name')->get()->toArray(),
+        ];
     }
 }

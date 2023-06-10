@@ -36,6 +36,7 @@ $api->version('v1', function ($api) {
             $api->post('/auth/login', 'AuthController@login')->middleware('throttle:3,1');
             $api->post('/auth/sign-up', 'AuthController@sign_up')->middleware('throttle:5,1');
             $api->get('/feeds', 'FeedController@feeds')->middleware('throttle:10,1');
+            $api->get('/feeds/meta', 'FeedController@meta');
             $api->group(
                 [
                     'middleware' => 'jwt.auth'
