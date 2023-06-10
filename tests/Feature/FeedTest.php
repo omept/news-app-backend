@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Category;
-use App\Services\FeedService;
+use App\Services\Feeds\FeedService;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use  \Tests\TestCase;
 use  \Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -32,26 +32,22 @@ class FeedTest extends TestCase
             []
         );
 
+        //seed default category
+        Category::factory()->create();
+
         $feedService = new FeedService();
-        $defaultCategory = Category::factory()->create();
+        $defaultCategory = $feedService->defaultCategory();
         $response->assertOk();
-        $response->assertSee([
+
+        $response->assertJsonStructure([
             "data" => [
                 "feeds" => [
-                    "category" => $feedService->defaultCategory()
+                    "category",
+                    "items"
                 ]
             ]
         ]);
-        // $response = $this->call(
-        //     'POST',
-        //     $uri,
-        //     ['email' => $appUser->email, 'password' => $password], //parameters
-        //     [], //cookies
-        //     [], // files
-        //     $this->headers(), // server
-        //     []
-        // );
-
-        $response->assertStatus(401)->assertExactJson(json_decode('{"message":"Invalid credentials","status_code":401,"status":false}', true));
+        $resArr = json_decode($response->getContent(), true);
+        $this->assertTrue($resArr['data']['feeds']['category']['name'] == ucwords($defaultCategory->name));
     }
 }
