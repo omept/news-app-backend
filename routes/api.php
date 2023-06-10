@@ -43,6 +43,11 @@ $api->version('v1', function ($api) {
                 ],
                 function ($api) {
 
+                    $api->post('/auth/user/settings', [
+                        'uses' => 'AuthController@updatePreference',
+                        'as' => 'api.auth.prefs'
+                    ]);
+                    
                     $api->patch('/auth/refresh', [
                         'uses' => 'AuthController@patchRefresh',
                         'as' => 'api.auth.refresh'

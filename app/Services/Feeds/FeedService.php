@@ -10,13 +10,10 @@ class FeedService
 
     static $defaultCategoryName = 'business';
     static $supportedCountries = ['germany', 'usa', 'china', 'nigeria'];
-    const NewscatcherApi = 'NewscatcherApi'; # default
-    const NewsData = 'NewsData';
-    const NewsApi = 'NewsApi';
     static $feedProviders = [
-        ['name' => 'NewscatcherApi.com', 'description' => 'Search worldwide news articles published online'],
-        ['name' => 'NewsData.io', 'description' => 'Get live breaking news or search historical news data for the past 2 years from 15453+ sources'],
-        ['name' => 'NewsApi.org', 'description' => 'Locate articles and breaking news headlines from news sources and blogs across the web'],
+        ['key' => 'NewscatcherApi', 'name' => 'NewscatcherApi.com', 'description' => 'Search worldwide news articles published online'],
+        ['key' => 'NewsData', 'name' => 'NewsData.io', 'description' => 'Get live breaking news or search historical news data for the past 2 years from 15453+ sources'],
+        ['key' => 'NewsApi', 'name' => 'NewsApi.org', 'description' => 'Locate articles and breaking news headlines from news sources and blogs across the web'],
     ];
     private ?User $user = null;
     private ?Adapter $adapter = null;
@@ -35,6 +32,11 @@ class FeedService
         return Category::where('name', self::$defaultCategoryName)->first();
     }
 
+    function supportedCategories(): array
+    {
+        return Category::select('name')->get()->pluck('name')->toArray();
+    }
+
     function defaultCountry(): string
     {
         return self::$supportedCountries[0];
@@ -43,6 +45,15 @@ class FeedService
     function defaultNewsProvider(): array
     {
         return self::$feedProviders[0];
+    }
+
+    function supportedProviders(): array
+    {
+        $supportedProviders = [];
+        for ($i = 0; $i < count(self::$feedProviders); $i++) {
+            $supportedProviders[] = self::$feedProviders[$i]['key'];
+        }
+        return $supportedProviders;
     }
 
     private function settings(): array

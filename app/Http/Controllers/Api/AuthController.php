@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Transformers\UserTransformer;
 use App\Models\User;
+use App\Services\Feeds\FeedService;
 use App\Utils\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -346,6 +347,78 @@ class AuthController extends BaseController
             ], $request);
         } catch (ValidationException $e) {
             $message = "token is required";
+            return Response::Problem($message, Response::ProblemResponseCode, $request);
+        } catch (\Exception $e) {
+            $message = 'Something went wrong while processing your request.';
+            return Response::Problem($message, Response::ServerErrorResponseCode, $request, $e);
+        }
+    }
+
+
+
+    /**
+     * Update user preference.
+     *
+     * @return \Illuminate\Http\Response
+     */
+
+    /**
+     * @OA\Post(
+     *   path="/api/auth/user/settings",
+     *   summary="Update user's news feed preference",
+     *          tags={"Settings"},
+     *   @OA\Response(
+     *     response=200,
+     *     description=""
+     *   ),
+     *   @OA\Parameter(
+     *     name="country",
+     *     description="country name",
+     *     required=false,
+     *     in= "query",
+     * ),
+     *   @OA\Parameter(
+     *     name="category",
+     *     description="category name",
+     *     required=false,
+     *     in= "query",
+     * ),
+     *   @OA\Parameter(
+     *     name="provider",
+     *     description="provider name",
+     *     required=false,
+     *     in= "query",
+     * )
+     * )
+     */
+    public function updatePreference(Request $request)
+    {
+        try {
+
+            $fs = new FeedService();
+            $validator = Validator::make($request->all(), [
+                'provider' => ['required', 'in:' . implode(",", $fs->supportedProviders())],
+                'category' => ['required', 'in:' . implode(",",  $fs->supportedCategories())],
+                'country' => ['required', 'in:' . implode(",", FeedService::$supportedCountries)]
+            ]);
+
+            if ($validator->fails())
+                throw new ValidationException($validator);
+
+
+            User::where('id', auth()->id())->update([
+                'provider_key' => $request->provider,
+                'settings' => json_encode([
+                    'country' => strtolower($request->country),
+                    'category' => strtolower($request->category),
+                ])
+            ]);
+
+            $message = 'Update successfully';
+
+            return Response::Ok($message, [], $request);
+        } catch (ValidationException $e) {
+            $message = json_encode($e->errors());
             return Response::Problem($message, Response::ProblemResponseCode, $request);
         } catch (\Exception $e) {
             $message = 'Something went wrong while processing your request.';
