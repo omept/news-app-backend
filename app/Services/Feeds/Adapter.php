@@ -50,6 +50,9 @@ class Adapter
             'category' => [
                 'name' => ucwords($category),
             ],
+            'country' => [
+                'name' => ucwords($country),
+            ],
             'items' => $this->adapter->query($country,  $category,  $search)
         ]);
     }

@@ -15,11 +15,11 @@ class FeedTest extends TestCase
     use DatabaseTransactions;
 
     /**
-     * Test the feed comes from default values when called
+     * Test that feeds api returns feeds with default category when to category is passed
      *
      * @return void
      */
-    public function testDefaultFeed()
+    public function testDefaultFeedCategory()
     {
         $uri = 'api/feeds';
         $response = $this->call(
@@ -43,11 +43,49 @@ class FeedTest extends TestCase
             "data" => [
                 "feeds" => [
                     "category",
-                    "items"
+                    "items",
+                    "country"
                 ]
             ]
         ]);
         $resArr = json_decode($response->getContent(), true);
         $this->assertTrue($resArr['data']['feeds']['category']['name'] == ucwords($defaultCategory->name));
+    }
+
+    /**
+     * Test that feeds api returns feeds with default country when to country is passed
+     *
+     * @return void
+     */
+    public function testDefaultFeedCountry()
+    {
+        $uri = 'api/feeds';
+        $response = $this->call(
+            'GET',
+            $uri,
+            [], //params
+            [], //cookies
+            [], // files
+            $this->headers(), // server
+            []
+        );
+
+        //seed default category
+        Category::factory()->create();
+
+        $defaultCountry = FeedService::$defaultCountry;
+        $response->assertOk();
+
+        $response->assertJsonStructure([
+            "data" => [
+                "feeds" => [
+                    "category",
+                    "items",
+                    "country",
+                ]
+            ]
+        ]);
+        $resArr = json_decode($response->getContent(), true);
+        $this->assertTrue($resArr['data']['feeds']['country']['name'] == ucwords($defaultCountry));
     }
 }
