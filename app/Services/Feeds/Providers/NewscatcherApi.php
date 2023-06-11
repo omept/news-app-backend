@@ -11,7 +11,6 @@ class NewscatcherApi extends Provider
     public string $name;
     public string $url;
     public string $key;
-    static $supportedCountriesAbbr = ['germany' => 'de', 'usa' => 'us', 'china' => 'cn', 'nigeria' => 'ng'];
 
 
     function __construct()

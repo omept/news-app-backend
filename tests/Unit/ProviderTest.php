@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\Models\User;
 use App\Services\Feeds\Adapter;
 use App\Services\Feeds\Providers\NewscatcherApi;
+use App\Services\Feeds\Providers\NewsData;
 use Database\Seeders\DefaultCategoriesSeed;
 use  \Tests\TestCase;
 use  \Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -14,15 +15,15 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 class ProviderTest extends TestCase
 {
 
-    /**
-     * Test that News API query
-     *
-     * @return void
-     */
-    public function testNewscatcherApiQuery()
-    {
+  /**
+   * Test that News API query
+   *
+   * @return void
+   */
+  public function testNewscatcherApiQuery()
+  {
 
-        $demoData = '{
+    $demoData = '{
             "status": "ok",
             "articles": [
               {
@@ -48,18 +49,57 @@ class ProviderTest extends TestCase
               }
             ]
           }';
-        Http::fake([
-            // Stub a JSON response for NewscatcherApi
-            'https://api.newscatcherapi.com/*' => Http::response(json_decode($demoData, true), 200,)
-        ]);
+    Http::fake([
+      // Stub a JSON response for NewscatcherApi
+      'https://api.newscatcherapi.com/*' => Http::response(json_decode($demoData, true), 200,)
+    ]);
 
-        $newscatcherApi = new NewscatcherApi();
-        $queryResults = $newscatcherApi->query('usa', 'business');
-        $this->assertArrayHasKey('image', $queryResults[0]);
-        $this->assertArrayHasKey('title', $queryResults[0]);
-        $this->assertArrayHasKey('description', $queryResults[0]);
-        $this->assertArrayHasKey('author', $queryResults[0]);
-        $this->assertArrayHasKey('date', $queryResults[0]);
-        $this->assertArrayHasKey('link', $queryResults[0]);
-    }
+    $newscatcherApi = new NewscatcherApi();
+    $queryResults = $newscatcherApi->query('usa', 'business');
+    $this->assertArrayHasKey('image', $queryResults[0]);
+    $this->assertArrayHasKey('title', $queryResults[0]);
+    $this->assertArrayHasKey('description', $queryResults[0]);
+    $this->assertArrayHasKey('author', $queryResults[0]);
+    $this->assertArrayHasKey('date', $queryResults[0]);
+    $this->assertArrayHasKey('link', $queryResults[0]);
+  }
+
+
+  /**
+   * Test that News API query
+   *
+   * @return void
+   */
+  public function testNewsDataQuery()
+  {
+
+    $demoData = '{
+        "results": [
+          {
+            "title": "Mancity Wins Champions League – Voice of Nigeria",
+            "description": "Mancity Wins Champions League – Voice of Nigeria",
+            "image_url": "Mancity Wins Champions League – Voice of Nigeria",
+            "source_id": "Mancity Wins Champions League – Voice of Nigeria",
+            "pubDate": "Mancity Wins Champions League – Voice of Nigeria",
+            "link": "Mancity Wins Champions League – Voice of Nigeria"
+          }
+        ]
+      }';
+
+    Http::fake([
+      // Stub a JSON response for NewsDataApi
+      'https://newsdata.io/api/1/*' => Http::response(json_decode($demoData, true), 200,)
+    ]);
+
+    // dd($demoData);
+    // dd(json_decode($demoData, true));
+    $newscatcherApi = new NewsData();
+    $queryResults = $newscatcherApi->query('usa', 'business');
+    $this->assertArrayHasKey('image', $queryResults[0]);
+    $this->assertArrayHasKey('title', $queryResults[0]);
+    $this->assertArrayHasKey('description', $queryResults[0]);
+    $this->assertArrayHasKey('author', $queryResults[0]);
+    $this->assertArrayHasKey('date', $queryResults[0]);
+    $this->assertArrayHasKey('link', $queryResults[0]);
+  }
 }
