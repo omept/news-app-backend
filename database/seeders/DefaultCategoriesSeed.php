@@ -16,7 +16,7 @@ class DefaultCategoriesSeed extends Seeder
     public function run()
     {
         $categories = [];
-        $names = ['business', 'sports', 'entertainment', 'technology', 'health', 'science'];
+        $names = ['business', 'sports', 'entertainment','news'];
         for ($i = 0; $i < count($names); $i++) {
             $categories[] = [
                 'name' => $names[$i],

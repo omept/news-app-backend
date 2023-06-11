@@ -8,7 +8,7 @@ class NewsAPI extends Provider
     public string $url;
     public string $key;
 
-    function __contruct()
+    function __construct()
     {
         $this->name = 'NewsApi';
         $this->url = 'NewsApi';
@@ -18,5 +18,25 @@ class NewsAPI extends Provider
     function query(string $country, string $category, string $search = ''): string
     {
         return json_encode([]);
+    }
+
+    public function transform(array $feed): array
+    {
+       
+        return [
+            'image' => '',
+            'title' => '',
+            'description' => '',
+            'author' => 'Lorem Emma',
+            'date' => "",
+            'link' => '',
+        ];
+    }
+
+    public function collect(array $collection): array
+    {
+        return collect($collection)->map(function ($model)   {
+            return $this->transform($model);
+        })->toArray();
     }
 }
