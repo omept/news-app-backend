@@ -22,7 +22,7 @@ class ProviderTest extends TestCase
     public function testNewscatcherApiQuery()
     {
 
-        $demoData = `{
+        $demoData = '{
             "status": "ok",
             "articles": [
               {
@@ -33,7 +33,7 @@ class ProviderTest extends TestCase
                 "link": "https://von.gov.ng/mancity-wins-champions-league",
                 "clean_url": "von.gov.ng",
                 "excerpt": null,
-                "summary": "Page Not Found!\n\nWe're sorry, but we can't find the page you were looking for. It's probably some thing we've done wrong but now we know about it and we'll try to fix it. In the meantime, try one of these options:",
+                "summary": "Page Not Found!\n\nWe\'re sorry, but we can\'t find the page you were looking for. It\'s probably some thing we\'ve done wrong but now we know about it and we\'ll try to fix it. In the meantime, try one of these options:",
                 "rights": "von.gov.ng",
                 "rank": 160283,
                 "topic": "business",
@@ -47,10 +47,10 @@ class ProviderTest extends TestCase
                 "_id": "df43f30d0d84912fbdf46561c7598453"
               }
             ]
-          }`;
+          }';
         Http::fake([
             // Stub a JSON response for NewscatcherApi
-            'https://api.newscatcherapi.com/*' => Http::response(json_decode($demoData, true), 200, )
+            'https://api.newscatcherapi.com/*' => Http::response(json_decode($demoData, true), 200,)
         ]);
 
         $newscatcherApi = new NewscatcherApi();

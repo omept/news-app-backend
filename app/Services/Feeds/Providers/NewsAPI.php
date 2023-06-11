@@ -15,9 +15,9 @@ class NewsAPI extends Provider
         $this->key = env('NEWS_API_KEY', '');
     }
 
-    function query(string $country, string $category, string $search = ''): string
+    function query(string $country, string $category, string $search = ''): array
     {
-        return json_encode([]);
+        return [];
     }
 
     public function transform(array $feed): array

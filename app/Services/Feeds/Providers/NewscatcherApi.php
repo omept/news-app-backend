@@ -21,24 +21,23 @@ class NewscatcherApi extends Provider
         $this->key = env('NEWS_CATCHER_API_KEY', '');
     }
 
-    function query(string $country, string $category, string $search = ''): string
+    function query(string $country, string $category, string $search = ''): array
     {
-        dd($this->url);
         $search = urlencode($search);
         $lastWeak = Carbon::now()->subDays(7)->format("Y/m/d");
         $country = strtoupper(self::$supportedCountriesAbbr[$country] ?? $country);
         $uri = $this->url . "/v2/search?q=$search&from=$lastWeak&countries=$country&page_size=1";
-        $response = Http::get($uri);
-
-        $articles = [];
+        $response = Http::withHeaders([
+            'X-API-KEY' => $this->key
+        ])->get($uri);
         try {
-            $articles = json_decode($response->json(), true);
+            $articles = $response->json();
             $articles = $articles['articles'];
         } catch (\Exception $e) {
             Log::error([$e->getMessage(), $e->getTraceAsString()]);
             $articles = [];
         }
-        return json_encode($this->collect($articles));
+        return $this->collect($articles);
     }
 
     public function transform(array $feed): array
@@ -50,7 +49,7 @@ class NewscatcherApi extends Provider
             'image' => $feed['media'] ?? '',
             'title' => $feed['title'] ?? '',
             'description' => $feed['summary'] ?? '',
-            'author' => count($author) > 0 ? $author : $rights,
+            'author' => strlen($author) > 0 ? $author : $rights,
             'date' => $feed['published_date'] ?? '',
             'link' => $feed['link'] ?? '',
         ];
