@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Services\Feeds\FeedService;
 use  \Tests\TestCase;
 use  \Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Facades\Http;
 
 class FeedTest extends TestCase
 {
@@ -18,6 +19,7 @@ class FeedTest extends TestCase
      */
     public function testDefaultFeedCategory()
     {
+        $this->mockExternalApiCalls();
         $uri = 'api/feeds';
         $response = $this->call(
             'GET',
@@ -49,7 +51,7 @@ class FeedTest extends TestCase
         $resArr = json_decode($response->getContent(), true);
         $this->assertTrue($resArr['data']['feeds']['category']['name'] == ucwords($defaultCategory->name));
     }
-    
+
     /**
      * Test that feeds meta api 
      *
@@ -57,6 +59,7 @@ class FeedTest extends TestCase
      */
     public function testFeedMeta()
     {
+        $this->mockExternalApiCalls();
         $uri = 'api/feeds/meta';
         $response = $this->call(
             'GET',
@@ -88,6 +91,7 @@ class FeedTest extends TestCase
      */
     public function testFeedCategoryChange()
     {
+        $this->mockExternalApiCalls();
         //seed default category
         Category::factory()->create();
         // seed sports category
@@ -129,6 +133,7 @@ class FeedTest extends TestCase
      */
     public function testDefaultFeedCountry()
     {
+        $this->mockExternalApiCalls();
         $uri = 'api/feeds';
         $response = $this->call(
             'GET',
@@ -160,7 +165,7 @@ class FeedTest extends TestCase
         $this->assertTrue($resArr['data']['feeds']['country']['name'] == ucwords($defaultCountry));
     }
 
-    
+
     /**
      * Test that feeds api returns feeds with passed country
      *
@@ -168,6 +173,7 @@ class FeedTest extends TestCase
      */
     public function testFeedCountryChange()
     {
+        $this->mockExternalApiCalls();
         //seed default category
         Category::factory()->create();
         $country = 'nigeria';
@@ -199,8 +205,8 @@ class FeedTest extends TestCase
         $resArr = json_decode($response->getContent(), true);
         $this->assertTrue($resArr['data']['feeds']['country']['name'] == ucwords($country));
     }
-    
-    
+
+
     /**
      * Test that feeds api returns feeds with passed search filter
      *
@@ -208,8 +214,9 @@ class FeedTest extends TestCase
      */
     public function testFeedSearch()
     {
+        $this->mockExternalApiCalls();
         $search = 'global warming';
-        $uri = 'api/feeds?search='.$search ;
+        $uri = 'api/feeds?search=' . $search;
         $response = $this->call(
             'GET',
             $uri,
@@ -235,4 +242,5 @@ class FeedTest extends TestCase
         $resArr = json_decode($response->getContent(), true);
         $this->assertTrue($resArr['data']['feeds']['search'] == $search);
     }
+
 }
