@@ -1,29 +1,63 @@
-# Dockerized Laravel News App API with Authentication, Multiple Aggregators, Search, Country And Category Filter, And Tests.
+# Dockerized Laravel NewsFeed API with Authentication, Multiple Aggregators, Search, Country And Category Filter, And Tests.
 
-This projects has a Docker Compose workflow that sets up Linux, MySQL, PHPAdmin, NGINX, PHP 7.4, Composer, Artisan, and XDebug network of containers for it, hence making usage easy.  
-# Set-up with Docker 
+This projects returns configurable news feeds from:
+```
+- NewscatcherApi.com
+- NewsData.io
+- NewsApi.org
+```
+
+It is loaded with, Docker, Linux, MySQL, Redis, MailHog, NGINX, PHP, Composer, and Artisan network of containers for it, hence making usage easy.
+
+
+
+# Set-up with Docker
+
 Follow the instructions below to run the application
 
-## Use
+## Usage
 
-To get started, make sure you have [Docker installed](https://docs.docker.com/) on your system and [Docker Compose](https://docs.docker.com/compose/install/), and then clone this repository.
+To get started, make sure you have [Docker installed](https://docs.docker.com/docker-for-mac/install/) on your system, and then clone this repository.
 
+Next, navigate in your terminal to the directory you cloned this, and spin up the containers for the web server by running
 
-1. Inside the folder, generate your own `.env` :
+-   `docker-compose up -d --build app`
 
-   ```sh
-   cp .env.example .env
-   ```
+Next, run the following command only once
 
-2. Build the project whit the next commands:
+-   `docker-compose run --rm composer update`
+-   `docker-compose run --rm composer dump-autoload`
+-   `docker-compose run --rm artisan cache:clear`
+-   `docker-compose run --rm artisan config:clear`
+-   `docker-compose run --rm artisan app:key`
+-   `docker-compose run --rm artisan jwt:secret`
+-   `docker-compose run --rm artisan migrate`
+-   `docker-compose run --rm artisan db:seed`
 
-   ```sh
-   docker-compose up -d --build
-   ```
+Next, open browser and visit:
+
+-   `localhost`
+
+The following are built for our web server, with their exposed ports detailed:
+
+-   **nginx** - `:80`
+-   **mysql** - `:3306`
+-   **php** - `:9000`
+-   **redis** - `:6379`
+-   **mailhog** - `:8025`
+
 
 ---
 
+## Aggregator Requirements
+Update the following varaibles in `.env` with appropriate keys
+```
+NEWS_API_KEY=
+NEWS_DATA_API_KEY=
+NEWS_CATCHER_API_KEY=
+```
 ## REST endpoints
+
 ```bash
 App endpoints can be found in api.rest file
 
@@ -42,48 +76,3 @@ App endpoints can be found in api.rest file
 ```
 
 ---
-
-## Ports
-
-Ports used in the project:
-| Software | Port |
-|-------------- | -------------- |
-| **nginx** | 8080 |
-| **phpmyadmin** | 8081 |
-| **mysql** | 3306 |
-| **php** | 9000 |
-| **xdebug** | 9001 |
-
-
-## Special Cases
-
-To Down and remove the volumes we use the next command:
-
-```sh
-docker-compose down -v
-```
-
-Update Composer:
-
-```sh
-docker-compose run --rm composer update
-```
-
-Run compiler (Webpack.mix.js) or Show the view compiler in node:
-
-```sh
-docker-compose run --rm npm run dev
-```
-
-Run all migrations:
-
-```sh
-docker-compose run --rm artisan migrate
-```
-
-Run all seeds:
-
-```sh
-docker-compose run --rm artisan db:seed
-```
-
