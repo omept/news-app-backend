@@ -1,64 +1,89 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# Dockerized Laravel News App API with Authentication, Multiple Aggregators, Search, Country And Category Filter, And Tests.
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This projects has a Docker Compose workflow that sets up Linux, MySQL, PHPAdmin, NGINX, PHP 7.4, Composer, Artisan, and XDebug network of containers for it, hence making usage easy.  
+# Set-up with Docker 
+Follow the instructions below to run the application
 
-## About Laravel
+## Use
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+To get started, make sure you have [Docker installed](https://docs.docker.com/) on your system and [Docker Compose](https://docs.docker.com/compose/install/), and then clone this repository.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1. Inside the folder, generate your own `.env` :
 
-## Learning Laravel
+   ```sh
+   cp .env.example .env
+   ```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+2. Build the project whit the next commands:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+   ```sh
+   docker-compose up --build
+   ```
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+## REST endpoints
+```bash
+App endpoints can be found in api.rest file
 
-### Premium Partners
+#### Routes ⚡
+| Routes           | HTTP Methods | Params                                   | Description                                                                                                  |
+| :--------------- | :----------- | :--------------------------------------- | :----------------------------------------------------------------------------------------------------------- |
+| /                | GET          | none                                     | Displays application infomation                                                                              |
+| /login           | POST         | `email` `password`                       | Logs in a user and returns the jwt session token                                                             |
+| /sign-up         | POST         | `email`,`password`, `name`               | Registers a user                                                                                             |
+| /refresh         | POST         | none                                     | Refresh a user jwt token                                                                                     |
+| /invalidate      | POST         | none                                     | Invalidate a user jwt token                                                                                  |
+| /settings        | POST         | `country`, `category`, `provider`        | Update user preference                                                                                       |
+| /meta            | GET          | `none`                                   | Returns default data used in app (e.g List of Providers/Categories                                           |
+| /feeds           | GET          | `country`, `category`, `search`         | News feed                                                                                                     |
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+```
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Ports
 
-## Code of Conduct
+Ports used in the project:
+| Software | Port |
+|-------------- | -------------- |
+| **nginx** | 8080 |
+| **phpmyadmin** | 8081 |
+| **mysql** | 3306 |
+| **php** | 9000 |
+| **xdebug** | 9001 |
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-## Security Vulnerabilities
+## Special Cases
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+To Down and remove the volumes we use the next command:
 
-## License
+```sh
+docker-compose down -v
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Update Composer:
+
+```sh
+docker-compose run --rm composer update
+```
+
+Run compiler (Webpack.mix.js) or Show the view compiler in node:
+
+```sh
+docker-compose run --rm npm run dev
+```
+
+Run all migrations:
+
+```sh
+docker-compose run --rm artisan migrate
+```
+
+Run all seeds:
+
+```sh
+docker-compose run --rm artisan db:seed
+```
+
