@@ -18,7 +18,7 @@ To get started, make sure you have [Docker installed](https://docs.docker.com/) 
 2. Build the project whit the next commands:
 
    ```sh
-   docker-compose up --build
+   docker-compose up -d --build
    ```
 
 ---
