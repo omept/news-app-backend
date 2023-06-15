@@ -83,6 +83,7 @@ class FeedService
     function meta(): array
     {
         return [
+            'user_provider' => $this->user ? $this->user->provider_key : '',
             'countries' => self::$supportedCountries,
             'providers' => self::$feedProviders,
             'categories' => Category::select('name')->get()->toArray(),

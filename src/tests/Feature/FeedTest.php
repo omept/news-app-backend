@@ -76,6 +76,7 @@ class FeedTest extends TestCase
         $response->assertJsonStructure([
             "data" => [
                 "meta" => [
+                    'user_provider',
                     'categories',
                     'countries',
                     'providers',
