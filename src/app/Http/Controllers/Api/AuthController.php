@@ -398,7 +398,7 @@ class AuthController extends BaseController
             $fs = new FeedService();
             $validator = Validator::make($request->all(), [
                 'provider' => ['required', 'in:' . implode(",", $fs->supportedProviders())],
-                'category' => ['somtimes', 'in:' . implode(",",  $fs->supportedCategories())],
+                'category' => ['sometimes', 'in:' . implode(",",  $fs->supportedCategories())],
                 'country' => ['sometimes', 'in:' . implode(",", FeedService::$supportedCountries)]
             ]);
 
