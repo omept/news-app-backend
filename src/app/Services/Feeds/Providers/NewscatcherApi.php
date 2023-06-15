@@ -25,13 +25,13 @@ class NewscatcherApi extends Provider
         $search = urlencode("news about " . $search);
         $lastWeak = Carbon::now()->subDays(7)->format("Y/m/d");
         $country = strtoupper(self::$supportedCountriesAbbr[$country] ?? $country);
-        $uri = $this->url . "/v2/search?q=$search&from=$lastWeak&countries=$country&page_size=1";
-        $response = Http::withHeaders([
-            'X-API-KEY' => $this->key
-        ])->get($uri);
         try {
+            $uri = $this->url . "/v2/search?q=$search&from=$lastWeak&countries=$country&page_size=1";
+            $response = Http::withHeaders([
+                'X-API-KEY' => $this->key
+            ])->get($uri);
             $articles = $response->json();
-            Log::info(['NewscatcherApi response: ',$uri, $articles]);
+            Log::info(['NewscatcherApi response: ', $uri, $articles]);
             $articles = $articles['articles'];
         } catch (\Exception $e) {
             Log::error([$e->getMessage(), $e->getTraceAsString()]);

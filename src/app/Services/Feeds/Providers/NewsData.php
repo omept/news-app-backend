@@ -23,10 +23,9 @@ class NewsData extends Provider
     {
         $search = urlencode($search);
         $country = strtoupper(self::$supportedCountriesAbbr[$country] ?? $country);
-        $uri = $this->url . "&country=$country&category=$category&q=$search";
-        $response = Http::get($uri);
-
         try {
+            $uri = $this->url . "&country=$country&category=$category&q=$search";
+            $response = Http::get($uri);
             $articles = $response->json();
             $articles = $articles['results'];
             Log::info(['NewsData response: ', $uri, $articles]);

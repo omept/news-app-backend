@@ -24,10 +24,9 @@ class NewsAPI extends Provider
         $search = urlencode($search);
         $lastWeak = Carbon::now()->subDays(7)->format("Y-m-d");
         $country = strtoupper(self::$supportedCountriesAbbr[$country] ?? $country);
-        $uri = $this->url . "q=$search&country=$country&from=$lastWeak&sortBy=publishedAt";
-        $response = Http::get($uri);
-
         try {
+            $uri = $this->url . "q=$search&country=$country&from=$lastWeak&sortBy=publishedAt";
+            $response = Http::get($uri);
             $articles = $response->json();
             $articles = $articles['articles'];
             Log::info(['NewsApi response: ', $uri, $articles]);
