@@ -163,6 +163,7 @@ class AuthController extends BaseController
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
                 'name' => $request->name,
+                'provider_key' => FeedService::$feedProviders[0]['key'],
             ]);
 
             $credentials = $request->only('email', 'password');

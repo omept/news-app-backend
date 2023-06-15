@@ -23,7 +23,7 @@ Next, navigate in your terminal to the directory you cloned this, and spin up th
 
 -   `docker-compose up -d --build app`
 
-Next, run the following command only once
+Next, run the following commands in this order.
 
 -   `docker-compose run --rm composer update`
 -   `docker-compose run --rm composer dump-autoload`
@@ -50,7 +50,7 @@ The following are built for our web server, with their exposed ports detailed:
 ---
 
 ## Aggregator Requirements
-Update the following varaibles in `.env` with appropriate keys
+Update the following varaibles in `src/.env` with appropriate keys
 ```
 NEWS_API_KEY=
 NEWS_DATA_API_KEY=
@@ -70,8 +70,8 @@ App endpoints can be found in api.rest file
 | /refresh         | POST         | none                                     | Refresh a user jwt token                                                                                     |
 | /invalidate      | POST         | none                                     | Invalidate a user jwt token                                                                                  |
 | /settings        | POST         | `country`, `category`, `provider`        | Update user preference                                                                                       |
-| /meta            | GET          | `none`                                   | Returns default data used in app (e.g List of Providers/Categories                                           |
-| /feeds           | GET          | `country`, `category`, `search`         | News feed                                                                                                     |
+| /meta            | GET          | `none`                                   | Returns default data used in app (e.g List of Providers/Categories/Countries)                                |
+| /feeds           | GET          | `country`, `category`, `search`          | News feed                                                                                                     |
 
 ```
 

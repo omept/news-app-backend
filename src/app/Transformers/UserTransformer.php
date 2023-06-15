@@ -20,6 +20,7 @@ class UserTransformer extends TransformerAbstract
        
         return [
             'user_id' => $user->id,
+            'user_provider' => $user->provider_key,
             'name' => $user->name,
             'email' => $user->email,
             'created_at' => Date::Valid($user->created_at) ? Carbon::parse($user->created_at)->toDateTimeString() : null,
