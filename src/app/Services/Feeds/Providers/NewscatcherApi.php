@@ -22,7 +22,7 @@ class NewscatcherApi extends Provider
 
     function query(string $country, string $category, string $search = ''): array
     {
-        $search = urlencode($search);
+        $search = urlencode("news about " . $search);
         $lastWeak = Carbon::now()->subDays(7)->format("Y/m/d");
         $country = strtoupper(self::$supportedCountriesAbbr[$country] ?? $country);
         $uri = $this->url . "/v2/search?q=$search&from=$lastWeak&countries=$country&page_size=1";
@@ -31,6 +31,7 @@ class NewscatcherApi extends Provider
         ])->get($uri);
         try {
             $articles = $response->json();
+            Log::info(['NewscatcherApi response: ',$uri, $articles]);
             $articles = $articles['articles'];
         } catch (\Exception $e) {
             Log::error([$e->getMessage(), $e->getTraceAsString()]);

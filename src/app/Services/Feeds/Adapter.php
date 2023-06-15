@@ -7,6 +7,7 @@ use App\Services\Feeds\Providers\NewsAPI;
 use App\Services\Feeds\Providers\NewsData;
 use App\Services\Feeds\Providers\NewscatcherApi;
 use App\Services\Feeds\Providers\Provider;
+use Illuminate\Support\Facades\Log;
 
 class Adapter
 {
@@ -46,6 +47,19 @@ class Adapter
 
     function query(string $country, string $category, string $search = ''): string
     {
+        Log::info('Adapter Called with: ', [
+            'adapter' => $this->adapter->name,
+            'payload' => [
+                'category' => [
+                    'name' => ucwords($category),
+                ],
+                'country' => [
+                    'name' => ucwords($country),
+                ],
+                'search' => $search
+            ]
+        ]);
+
         return json_encode([
             'category' => [
                 'name' => ucwords($category),

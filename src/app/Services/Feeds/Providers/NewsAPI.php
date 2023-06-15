@@ -30,6 +30,7 @@ class NewsAPI extends Provider
         try {
             $articles = $response->json();
             $articles = $articles['articles'];
+            Log::info(['NewsApi response: ', $uri, $articles]);
         } catch (\Exception $e) {
             Log::error([$e->getMessage(), $e->getTraceAsString()]);
             $articles = [];

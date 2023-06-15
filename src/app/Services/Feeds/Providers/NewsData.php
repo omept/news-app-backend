@@ -29,6 +29,7 @@ class NewsData extends Provider
         try {
             $articles = $response->json();
             $articles = $articles['results'];
+            Log::info(['NewsData response: ', $uri, $articles]);
         } catch (\Exception $e) {
             Log::error([$e->getMessage(), $e->getTraceAsString()]);
             $articles = [];
